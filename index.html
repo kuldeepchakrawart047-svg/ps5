@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080a12">
+<title>PS5 Quest — Saving Tracker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--bg:#080a12;--panel:#111522;--panel2:#151b2b;--line:#293149;--text:#f3f6ff;--muted:#9ba6c0;--cyan:#63f5ff;--purple:#9d7bff;--green:#72ffb5;--pink:#ff5dbe}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#17264b 0,transparent 38%),radial-gradient(ellipse at 0% 40%,#24133e 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(to bottom,black,transparent 90%);z-index:-1}
+.wrap{width:min(1120px,92%);margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 0}.brand{font:700 1.05rem Orbitron,sans-serif;letter-spacing:1px}.brand span{color:var(--cyan)}.status{border:1px solid #72ffb54a;color:var(--green);padding:8px 12px;border-radius:30px;font-size:.75rem;background:#72ffb510;display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green);animation:pulse 1.6s infinite}
+.hero{padding:50px 0 32px;display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center}.eyebrow{color:var(--cyan);font:600 .75rem Orbitron,sans-serif;letter-spacing:2.3px;text-transform:uppercase}.hero h1{font:800 clamp(2.4rem,6vw,5rem)/1.04 Orbitron,sans-serif;margin:18px 0 16px;letter-spacing:-2px}.hero h1 span{background:linear-gradient(90deg,var(--cyan),#b6a1ff 65%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);line-height:1.75;max-width:560px}.console-art{height:280px;display:grid;place-items:center;position:relative;animation:float 5s ease-in-out infinite}.orb{position:absolute;width:245px;height:245px;border-radius:50%;background:radial-gradient(circle,#704dff3b,transparent 68%);filter:blur(8px)}.ring{position:absolute;width:255px;height:255px;border:1px solid #63f5ff50;border-radius:50%;transform:rotateX(65deg) rotateZ(-22deg);animation:spin 13s linear infinite}.ring.r2{width:210px;height:210px;border-color:#9d7bff80;animation-direction:reverse;animation-duration:9s}.psbox{position:relative;width:125px;height:190px;background:linear-gradient(110deg,#dce7f4,#8793ad 48%,#f2f6ff);clip-path:polygon(19% 0,81% 0,100% 12%,100% 90%,79% 100%,20% 100%,0 89%,0 12%);filter:drop-shadow(0 20px 35px #0008);transform:rotate(-9deg)}.psbox:before{content:"PS5";position:absolute;top:42%;left:0;right:0;text-align:center;color:#111827;font:800 1.7rem Orbitron,sans-serif;transform:rotate(90deg)}.psbox:after{content:"";position:absolute;inset:7px;border:1px solid #ffffff90;clip-path:inherit}.float-tag{position:absolute;right:2%;bottom:30px;border:1px solid var(--line);background:#111522d9;backdrop-filter:blur(10px);padding:11px 14px;border-radius:12px;font-size:.8rem;box-shadow:0 10px 30px #0005}.float-tag b{color:var(--green)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0 24px}.stat,.card{background:linear-gradient(145deg,#151b2bdf,#0e121eeF);border:1px solid var(--line);border-radius:20px;box-shadow:0 16px 45px #0002}.stat{padding:20px}.stat .label{font-size:.76rem;color:var(--muted)}.stat .value{font:700 clamp(1.25rem,3vw,1.9rem) Orbitron,sans-serif;margin-top:11px;overflow-wrap:anywhere}.cyan{color:var(--cyan)}.green{color:var(--green)}.purple{color:#bba7ff}
+.card{padding:24px;margin-bottom:22px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.section-head h2{font:700 1.05rem Orbitron,sans-serif;margin:0}.sub{color:var(--muted);font-size:.82rem;margin-top:8px}.progress-top{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:12px}.progress-top strong{font:700 1.35rem Orbitron,sans-serif}.progress-track{height:13px;background:#252d43;border-radius:99px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));border-radius:99px;box-shadow:0 0 18px #63f5ff66;transition:width .65s cubic-bezier(.2,.8,.2,1);position:relative}.progress-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,#ffffff80 50%,transparent 80%);animation:shine 2.5s linear infinite}.progress-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:.76rem;margin-top:10px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800;font-size:.84rem;cursor:pointer;transition:transform .2s,filter .2s}.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}.primary{color:#071017;background:linear-gradient(100deg,var(--cyan),#9fffd5);box-shadow:0 6px 22px #63f5ff20}.ghost{background:#1a2031;color:var(--text);border:1px solid var(--line)}.danger{color:#ff9aaf;background:#ff5dbe12;border:1px solid #ff5dbe42}
+.month-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.month{padding:14px 10px;border-radius:14px;background:#0d1220;border:1px solid var(--line)}.month .mname{font-size:.75rem;color:var(--muted)}.month .amount{font:700 1rem Orbitron,sans-serif;margin:8px 0}.month .mbar{height:4px;background:#283149;border-radius:10px;overflow:hidden}.month .mbar span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:10px}.month .hint{font-size:.68rem;color:var(--muted);margin-top:8px}
+.check-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.select{background:#0d1220;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px}.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{position:relative;min-height:76px;border:1px solid var(--line);background:#0d1220;border-radius:12px;color:var(--text);padding:10px 5px;cursor:pointer;transition:all .2s;text-align:center;overflow:hidden}.day:hover{border-color:#63f5ff88;transform:translateY(-2px)}.day .dn{font:700 .85rem Orbitron,sans-serif}.day .cash{font-size:.65rem;color:var(--muted);margin-top:7px}.day.done{background:linear-gradient(145deg,#12362f,#132c39);border-color:#72ffb5a0;box-shadow:inset 0 0 20px #72ffb50a}.day.done .dn{color:var(--green)}.day.done .cash{color:#b0ffdb}.day.done:after{content:"✓";position:absolute;top:3px;right:6px;color:var(--green);font-size:.7rem}.day.today{outline:1px solid var(--cyan);outline-offset:1px}.empty{color:var(--muted);font-size:.85rem;grid-column:1/-1;padding:20px 0}
+.note{font-size:.78rem;line-height:1.7;color:var(--muted)}.note b{color:var(--text)}footer{padding:20px 0 42px;text-align:center;color:#75809b;font-size:.75rem}.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#172b2b;border:1px solid #72ffb566;color:var(--green);padding:12px 18px;border-radius:12px;box-shadow:0 12px 35px #0008;transition:.25s;z-index:10}.toast.show{opacity:1;transform:translate(-50%,0)}.confetti{position:fixed;top:-10px;width:7px;height:12px;z-index:9;pointer-events:none;animation:fall 1.7s linear forwards}
+@keyframes pulse{50%{opacity:.4;box-shadow:0 0 3px var(--green)}}@keyframes float{50%{transform:translateY(-10px)}}@keyframes spin{to{transform:rotateX(65deg) rotateZ(338deg)}}@keyframes shine{to{transform:translateX(150%)}}@keyframes fall{to{transform:translateY(110vh) rotate(700deg);opacity:0}}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:25px;gap:0}.hero h1{letter-spacing:-1px}.console-art{height:225px;order:-1}.psbox{transform:scale(.8) rotate(-9deg)}.ring{width:205px;height:205px}.ring.r2{width:170px;height:170px}.orb{width:210px;height:210px}.float-tag{right:4%;bottom:10px}.stats{gap:8px}.stat{padding:14px 11px;border-radius:15px}.stat .label{font-size:.68rem}.stat .value{font-size:1.05rem}.card{padding:17px;border-radius:17px}.month-grid{grid-template-columns:repeat(2,1fr)}.month:last-child{grid-column:span 2}.days{grid-template-columns:repeat(5,1fr);gap:6px}.day{min-height:68px;padding:9px 2px}.section-head{align-items:flex-start;flex-direction:column}.progress-top strong{font-size:1rem}}
+@media(max-width:380px){.days{grid-template-columns:repeat(4,1fr)}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:span 2}.brand{font-size:.9rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">PS5 <span>QUEST</span></div>
+    <div class="status"><i class="dot"></i> MISSION ACTIVE</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Your goal. Your grind.</div>
+      <h1>LEVEL UP<br>YOUR <span> SAVINGS.</span></h1>
+      <p>150 days. One mission. Tick off each day you save money and watch your PS5 dream get closer, one step at a time.</p>
+      <div class="actions"><button class="btn primary" onclick="document.querySelector('#daily').scrollIntoView({behavior:'smooth'})">START TODAY ↘</button><button class="btn ghost" onclick="exportProgress()">EXPORT PROGRESS ↓</button></div>
+    </div>
+    <div class="console-art" aria-label="Stylized game console illustration">
+      <div class="orb"></div><div class="ring"></div><div class="ring r2"></div><div class="psbox"></div>
+      <div class="float-tag">NEXT LEVEL <b>₹64,000</b></div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><div class="label">TOTAL SAVED</div><div class="value green" id="saved">₹0</div></div>
+    <div class="stat"><div class="label">STILL TO GO</div><div class="value cyan" id="remaining">₹64,000</div></div>
+    <div class="stat"><div class="label">DAYS COMPLETE</div><div class="value purple" id="completed">0 / 150</div></div>
+  </section>
+
+  <section class="card">
+    <div class="progress-top"><div><div class="eyebrow">Mission progress</div><div class="sub">Every rupee takes you closer.</div></div><strong id="percent">0%</strong></div>
+    <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+    <div class="progress-foot"><span>START: ₹0</span><span id="targetlabel">TARGET: ₹64,000</span></div>
+  </section>
+
+  <section class="card">
+    <div class="section-head"><div><h2>FIVE-MONTH PLAN</h2><div class="sub">A suggested saving target for each month.</div></div></div>
+    <div class="month-grid" id="months"></div>
+  </section>
+
+  <section class="card" id="daily">
+    <div class="section-head">
+      <div><h2>DAILY CHECKLIST</h2><div class="sub">Tap a day after you actually save ₹427. Tap again to undo.</div></div>
+      <div class="check-controls"><select class="select" id="monthSelect" aria-label="Select month" onchange="renderDays()"><option value="0">Month 1</option><option value="1">Month 2</option><option value="2">Month 3</option><option value="3">Month 4</option><option value="4">Month 5</option></select><button class="btn ghost" onclick="markMonth()">Mark month</button></div>
+    </div>
+    <div class="days" id="days"></div>
+    <p class="note">Daily goal: <b>₹427</b> × 150 days = <b>₹64,050</b>. This slightly exceeds your ₹64,000 target. If you save a different amount on a day, use the custom amount button below.</p>
+    <div class="actions"><button class="btn primary" onclick="customSave()">＋ Add custom saving</button><button class="btn ghost" onclick="undoLast()">Undo last tick</button><button class="btn danger" onclick="resetAll()">Reset all</button></div>
+  </section>
+
+  <section class="card">
+    <div class="section-head"><div><h2>KEEP IT REAL</h2><div class="sub">Small wins. Consistent progress.</div></div></div>
+    <p class="note">This tracker records money you save, not just money you earn. If you have expenses, earn more than your daily saving goal. Online income can vary, so don't borrow money or pay a registration fee to get a job. Your progress is saved in this browser on this device.</p>
+  </section>
+  <footer>PS5 QUEST · YOUR 150-DAY SAVING CHALLENGE</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const TARGET=64000, DAYS=150, DAILY=427;
+const monthTargets=[3000,8000,12000,18000,23000];
+let state={amounts:{},custom:[]};
+try{const old=JSON.parse(localStorage.getItem('ps5QuestV1')||'null');if(old&&old.amounts)state=old;}catch(e){}
+function saveState(){try{localStorage.setItem('ps5QuestV1',JSON.stringify(state));}catch(e){}}
+function money(n){return '₹'+Math.round(n).toLocaleString('en-IN')}
+function amountFor(day){return Number(state.amounts[day]||0)}
+function total(){return Object.values(state.amounts).reduce((s,v)=>s+Number(v||0),0)}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
+function render(){
+ const sum=total(), pct=Math.min(100,sum/TARGET*100), count=Object.keys(state.amounts).filter(k=>Number(state.amounts[k])>0).length;
+ document.getElementById('saved').textContent=money(sum);
+ document.getElementById('remaining').textContent=money(Math.max(0,TARGET-sum));
+ document.getElementById('completed').textContent=count+' / '+DAYS;
+ document.getElementById('percent').textContent=Math.floor(pct)+'%';
+ document.getElementById('fill').style.width=pct+'%';
+ renderMonths();renderDays();
+ if(sum>=TARGET&&!state.celebrated){state.celebrated=true;saveState();confetti();showToast('MISSION COMPLETE! PS5 target reached! 🎮');}
+ if(sum<TARGET&&state.celebrated){state.celebrated=false;saveState();}
+}
+function renderMonths(){
+ const el=document.getElementById('months');el.innerHTML='';
+ monthTargets.forEach((n,i)=>{const start=i*30+1,end=(i+1)*30;let s=0;for(let d=start;d<=end;d++)s+=amountFor(d);const div=document.createElement('div');div.className='month';div.innerHTML=`<div class="mname">MONTH ${i+1}</div><div class="amount">${money(s)}</div><div class="mbar"><span style="width:${Math.min(100,s/n*100)}%"></span></div><div class="hint">Target ${money(n)}</div>`;el.appendChild(div);});
+}
+function renderDays(){
+ const m=Number(document.getElementById('monthSelect').value||0), el=document.getElementById('days');el.innerHTML='';
+ const start=m*30+1,end=Math.min(start+29,DAYS);
+ for(let d=start;d<=end;d++){const val=amountFor(d),b=document.createElement('button');b.className='day'+(val>0?' done':'');b.setAttribute('aria-pressed',val>0?'true':'false');b.innerHTML=`<div class="dn">DAY ${d}</div><div class="cash">${val>0?money(val):'＋ ₹427'}</div>`;b.onclick=()=>toggleDay(d);el.appendChild(b);}
+}
+function toggleDay(day){if(amountFor(day)>0){delete state.amounts[day];showToast('Day '+day+' unchecked');}else{state.amounts[day]=DAILY;showToast('Day '+day+' saved: ₹427');}saveState();render();}
+function markMonth(){const m=Number(document.getElementById('monthSelect').value||0);let changed=0;for(let d=m*30+1;d<=Math.min((m+1)*30,DAYS);d++){if(!amountFor(d)){state.amounts[d]=DAILY;changed++;}}saveState();render();showToast(changed?changed+' days marked. Edit by tapping a day.':'This month is already checked.');}
+function customSave(){const raw=prompt('Kitne rupees save kiye? (Example: 250)');if(raw===null)return;const n=Number(raw);if(!Number.isFinite(n)||n<=0){showToast('Please enter a valid amount.');return;}const m=Number(document.getElementById('monthSelect').value||0);let day=0;for(let d=m*30+1;d<=Math.min((m+1)*30,DAYS);d++){if(!amountFor(d)){day=d;break;}}if(!day){showToast('This month has no empty days.');return;}state.amounts[day]=Math.round(n*100)/100;saveState();render();showToast(money(n)+' added to Day '+day);}
+function undoLast(){const keys=Object.keys(state.amounts).map(Number).sort((a,b)=>b-a);if(!keys.length){showToast('Nothing to undo yet.');return;}delete state.amounts[keys[0]];saveState();render();showToast('Day '+keys[0]+' unchecked.');}
+function resetAll(){if(confirm('Reset all saved checklist progress on this device? This cannot be undone.')){state={amounts:{},custom:[]};saveState();render();showToast('Tracker reset. Fresh start!');}}
+function exportProgress(){let text='PS5 QUEST SAVING TRACKER\\nTarget: ₹64,000\\nSaved: '+money(total())+'\\nRemaining: '+money(Math.max(0,TARGET-total()))+'\\n\\n';for(let d=1;d<=DAYS;d++)text+=(amountFor(d)>0?'[✓] ':'[ ] ')+'Day '+d+' — '+(amountFor(d)>0?money(amountFor(d)):'Not saved')+'\\n';const blob=new Blob([text],{type:'text/plain'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='ps5-saving-progress.txt';a.click();URL.revokeObjectURL(url);showToast('Progress exported!');}
+function confetti(){for(let i=0;i<70;i++){const e=document.createElement('i');e.className='confetti';e.style.left=Math.random()*100+'vw';e.style.background=['#63f5ff','#9d7bff','#72ffb5','#ff5dbe'][i%4];e.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),2400);}}
+render();
+</script>
+</body>
+</html>
